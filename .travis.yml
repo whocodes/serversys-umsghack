@@ -6,7 +6,6 @@ addons:
 
 env:
   global:
-    - INCLUDE=addons/sourcemod/scripting/include/
     - SCRIPTING=addons/sourcemod/scripting/
     - PLUGINS=addons/sourcemod/plugins
     - SOURCEMOD_MAJOR=1.7
@@ -25,8 +24,8 @@ install:
   - chmod -R 777 serversys-master
   - cp -rv serversys-master/. .
   - find build-env/addons/sourcemod/scripting/ -name "*.sp" -type f -delete
+  - cd ../
   - cp -rv $SCRIPTING/. build-env/addons/sourcemod/scripting/
-  - cp -rv $INCLUDE/. build-env/addons/sourcemod/scripting/include/
 
 before_script:
   - chmod +rx build-env/addons/sourcemod/scripting/spcomp
