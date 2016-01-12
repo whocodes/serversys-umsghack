@@ -2,7 +2,7 @@
 #include <protobuf>
 #include <serversys>
 
-#pragma semicolon 1
+#pragma semicolon 1 
 
 public Plugin:myinfo = {
 	name = "[Server-Sys] UMsg-Hack",
@@ -20,7 +20,7 @@ bool g_bDebug = false;
 
 public void OnPluginStart(){
 	HookUserMessage(GetUserMessageId("TextMsg"), UserMessageHook_Text, true);
-	
+
 	if(!LoadConfig()){
 		SetFailState("[server-sys] umsghack :: Unable to load.");
 	}
@@ -31,17 +31,17 @@ public Action UserMessageHook_Text(UserMsg msg_id, Protobuf msg, const int[] pla
 		return Plugin_Continue;
 
 	char sBuffer[64]; char sResult[64];
-	
+
 	int iRepeat = PbGetRepeatedFieldCount(msg, "params");
 	for(int i = 0; i < iRepeat; i++){
 		PbReadString(msg, "params", sBuffer, sizeof(sBuffer), i);
 		if(StrEqual(sBuffer, ""))
 			continue;
-		
+
 		if(g_bDebug){
 			PrintToServer("UserMessage Debug :: %s", sBuffer);
 		}
-		
+
 		if(g_hArray_HiddenPhrase != INVALID_HANDLE){
 			for(int j = 0; j < g_iTotalHiddenPhrases; j++){
 				g_hArray_HiddenPhrase.GetString(j, sResult, sizeof(sResult));
@@ -70,19 +70,19 @@ bool LoadConfig(){
 
 	Handle hKeyValues = CreateKeyValues("UMsg-Hack");
 	KvSetEscapeSequences(hKeyValues, true);
-	
+
 	if(FileToKeyValues(hKeyValues, path)){
 		g_bEnabled = view_as<bool>(KvGetNum(kv, "enabled", 1));
 		g_bDebug = view_as<bool>(KvGetNum(kv, "debug", 0));
-		
+
 		if(KvJumpToKey(hKeyValues, "Phrases")){
 			char result[64];
 			g_iTotalHiddenPhrases = 0;
 			KvGotoFirstSubKey(hKeyValues, false);
-			
+
 			while(KvGotoNextKey(hKeyValues, false)){
 				KvGetSectionName(hKeyValues, result, sizeof(result));
-				
+
 				g_hArray_HiddenPhrase.PushString(result)
 				g_iTotalHiddenPhrases++;
 			}
@@ -93,4 +93,4 @@ bool LoadConfig(){
 
 
 	return false;
-}  		
+}
