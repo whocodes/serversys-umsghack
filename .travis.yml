@@ -23,8 +23,8 @@ install:
   - unzip master.zip
   - chmod -R 777 serversys-master
   - cp -rv serversys-master/. .
-  - find build-env/addons/sourcemod/scripting/ -name "*.sp" -type f -delete
   - cd ../
+  - find build-env/addons/sourcemod/scripting/ -name "*.sp" -type f -delete
   - cp -rv $SCRIPTING/. build-env/addons/sourcemod/scripting/
 
 before_script:
