@@ -83,7 +83,7 @@ bool LoadConfig(){
 			while(kv.GotoNextKey(false)){
 				kv.GetSectionName(result, sizeof(result));
 
-				g_hArray_HiddenPhrase.PushString(result)
+				g_hArray_HiddenPhrase.PushString(result);
 				g_iTotalHiddenPhrases++;
 			}
 		}
