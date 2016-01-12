@@ -2,7 +2,7 @@
 #include <protobuf>
 #include <serversys>
 
-#pragma semicolon 1 
+#pragma semicolon 1
 
 public Plugin:myinfo = {
 	name = "[Server-Sys] UMsg-Hack",
@@ -13,7 +13,7 @@ public Plugin:myinfo = {
 }
 
 int g_iTotalHiddenPhrases;
-ArrayList g_hArray_HiddenPhrase = INVALID_HANDLE;
+ArrayList g_hArray_HiddenPhrase = view_as<ArrayList>(INVALID_HANDLE);
 
 bool g_bEnabled = true;
 bool g_bDebug = false;
@@ -68,29 +68,29 @@ bool LoadConfig(){
 		return false;
 	}
 
-	Handle hKeyValues = CreateKeyValues("UMsg-Hack");
-	KvSetEscapeSequences(hKeyValues, true);
+	KeyValues kv = CreateKeyValues("UMsg-Hack");
+	kv.SetEscapeSequences(true);
 
-	if(FileToKeyValues(hKeyValues, path)){
-		g_bEnabled = view_as<bool>(KvGetNum(kv, "enabled", 1));
-		g_bDebug = view_as<bool>(KvGetNum(kv, "debug", 0));
+	if(kv.ImportFromFile(path)){
+		g_bEnabled = view_as<bool>(kv.GetNum("enabled", 1));
+		g_bDebug = view_as<bool>(kv.GetNum("debug", 0));
 
-		if(KvJumpToKey(hKeyValues, "Phrases")){
+		if(kv.JumpToKey("Phrases")){
 			char result[64];
 			g_iTotalHiddenPhrases = 0;
-			KvGotoFirstSubKey(hKeyValues, false);
+			kv.GotoFirstSubKey(false);
 
-			while(KvGotoNextKey(hKeyValues, false)){
-				KvGetSectionName(hKeyValues, result, sizeof(result));
+			while(kv.GotoNextKey(false)){
+				kv.GetSectionName(result, sizeof(result));
 
 				g_hArray_HiddenPhrase.PushString(result)
 				g_iTotalHiddenPhrases++;
 			}
 		}
-		Sys_KillHandle(hKeyValues);
+		delete kv;
 		return true;
 	}
 
-
+	delete kv;
 	return false;
 }
